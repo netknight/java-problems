@@ -26,5 +26,6 @@ public class EqualsTest {
         String[] array2 = {"A", "B"};
         assertTrue(array1.equals(array2));
 
+        // Where array functions?
     }
 }

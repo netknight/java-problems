@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertEquals;
+
 @SuppressWarnings("UnstableApiUsage")
 @RunWith(JUnit4.class)
 public class CollectionsTests {
@@ -54,6 +56,12 @@ public class CollectionsTests {
         Stream<String> stream = list.stream();
         list.add("eggs");
         stream.forEach(System.out::println);
+    }
+
+    @Test
+    public void testCollectionVsStream() {
+        ImmutableList<String> list = ImmutableList.of("1", "2", "3", "4", "5");
+        assertEquals(list.size(), list.stream().filter(v -> !v.equals("0")).count()); // Why different types are used? How it is working: long vs int equals?
     }
 
 }

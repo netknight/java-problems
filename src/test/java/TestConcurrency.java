@@ -5,9 +5,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.AbstractCollection;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+@SuppressWarnings({"WeakerAccess", "UnstableApiUsage"})
 @RunWith(JUnit4.class)
 public class TestConcurrency {
 
@@ -23,7 +25,18 @@ public class TestConcurrency {
         );
     }
 
-    static CompletionStage<ImmutableList<String>> doFindInSearchEngine(String url) {
+    @SuppressWarnings("unused")
+    static CompletionStage<Optional<String>> flatten(CompletionStage<Optional<CompletionStage<Optional<Object>>>> future) {
+        return future.thenCompose(result ->
+            result.map(f ->
+                f.thenApply(opt ->
+                    opt.map(Object::toString)
+                )
+            ).orElse(CompletableFuture.completedFuture(Optional.empty()))
+        );
+    }
+
+    static CompletionStage<ImmutableList<String>> doFindInSearchEngine(@SuppressWarnings("unused") String url) {
         return CompletableFuture.completedFuture(ImmutableList.of("Result1", "Result2"));
     }
 
@@ -44,13 +57,12 @@ public class TestConcurrency {
     }
 
     @Test
-    public void concurrencyTest2NPE() {
+    public void concurrencyTest2() {
 
         ImmutableList<Void> combinedSearchResult = sequence(getSearchEnginesToFind().entrySet().stream()
-                .map(entry -> doFindInSearchEngine(entry.getValue()).thenAccept(result-> logRecord(entry.getKey() + " search finished.")))
-                .collect(ImmutableList.toImmutableList())).toCompletableFuture().join();
+            .map(entry -> doFindInSearchEngine(entry.getValue()).thenAccept(result-> logRecord(entry.getKey() + " search finished.")))
+            .collect(ImmutableList.toImmutableList())).toCompletableFuture().join();
 
         logRecord("Completed with total searches: " + combinedSearchResult.size());
     }
-
 }
