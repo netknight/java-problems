@@ -8,7 +8,8 @@ import static io.vavr.Predicates.instanceOf;
 
 @SuppressWarnings("WeakerAccess")
 @RunWith(JUnit4.class)
-public class TypeInferenceTest {
+public class Example4 {
+
 
     interface Request {
 

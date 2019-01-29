@@ -11,7 +11,7 @@ import java.util.concurrent.CompletionStage;
 
 @SuppressWarnings({"WeakerAccess", "UnstableApiUsage"})
 @RunWith(JUnit4.class)
-public class TestConcurrency {
+public class Example5 {
 
     static void logRecord(String message) {
         System.out.println(message);
@@ -48,10 +48,10 @@ public class TestConcurrency {
     public void concurrencyTest1() {
 
         ImmutableList<ImmutableList<String>> combinedSearchResult = sequence(getSearchEnginesToFind().entrySet().stream()
-                .map(entry -> doFindInSearchEngine(entry.getValue()).thenApply(result-> {
-                    logRecord(entry.getKey() + " search finished.");
-                    return result;
-                })).collect(ImmutableList.toImmutableList())).toCompletableFuture().join();
+            .map(entry -> doFindInSearchEngine(entry.getValue()).thenApply(result-> {
+                logRecord(entry.getKey() + " search finished.");
+                return result;
+            })).collect(ImmutableList.toImmutableList())).toCompletableFuture().join();
 
         logRecord("Completed with total results: " + combinedSearchResult.stream().mapToInt(AbstractCollection::size).sum());
     }

@@ -5,7 +5,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @RunWith(classOf[JUnit4])
-object TestScalaConcurrency {
+object Example6 {
 
   def flatten1(future: Future[Option[Future[Option[AnyRef]]]]): Future[Option[String]] = {
     future.flatMap(
