@@ -3,12 +3,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static junit.framework.TestCase.assertEquals;
 
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 @RunWith(JUnit4.class)
 public class Example2 {
 

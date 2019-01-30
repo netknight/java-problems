@@ -26,4 +26,21 @@ object Example6 {
     }
   }
 
+  def doAsyncAction(request: String): Future[String] = {
+    Future.successful("response")
+  }
+
+  def batchOperations(future: Future[List[String]]): Future[List[String]] = {
+    future.map(results =>
+      Future.sequence(
+        results.sliding(10).toList.map(batch =>
+          Future.sequence(
+            batch.map(item =>
+              doAsyncAction(item)
+            )
+          )
+        )
+      ).map(_.flatten)
+    ).flatten
+  }
 }
