@@ -5,6 +5,7 @@ import org.junit.runners.JUnit4;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -89,18 +90,22 @@ public class Example1 {
 
     @Test
     // Also has refactoring problems
-    public void test1() {
+    public void testFunctionOverload() {
         Optional<String>[] array = new Optional[10];
         array[0] = Optional.of("Test4");
 
         log(MyClass.toString("Test1"));
         log(MyClass.toString(Integer.MAX_VALUE));
-        //log(MyClass.toString(v -> "Test")); // won't compile with function as a parameter
+
         log(MyClass.toString(Optional.of("Test2")));
         log(MyClass.toString(Optional.empty()));
         log(MyClass.toString(Optional.of("Test3"), Optional.empty()));
         log(MyClass.toString(array));
         //log(MyClass.toString(null)); // won't compile
+
+        Function<String, String> f = (s) -> s;
+        log(MyClass.toString(f));
+        //log(MyClass.toString((s) -> s)); // won't compile
     }
 
 }
