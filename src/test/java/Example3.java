@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static utils.Utils.log;
 
 @SuppressWarnings({"UnstableApiUsage", "SimplifiableJUnitAssertion"})
 @RunWith(JUnit4.class)
@@ -32,9 +33,11 @@ public class Example3 {
         Optional<String> a = Optional.of("AA");
         Optional<String> b = Optional.empty(); // None - would be shorter
 
-        System.out.println(a.orElse(b.orElse("BB")));
-        System.out.println(a.map(v -> b.orElse(v)));
-        System.out.println(a.flatMap(v -> b.map(d -> v)));
+        log(a.orElse(b.orElse("BB")));
+        log(a.map(v -> b.orElse(v)));
+        log(a.flatMap(v -> b.map(d -> v)));
+        // Why Options aren't used everywhere?
+        // Option is a collection of 0..1 elements
     }
 
     @Test
@@ -42,7 +45,7 @@ public class Example3 {
         ImmutableList<String> list = ImmutableList.of("1", "2", "3");
 
         ImmutableList<Integer> result = list.stream().map(Integer::valueOf).collect(ImmutableList.toImmutableList());
-        System.out.println(result);
+        log(result);
     }
 
     @Test
@@ -57,13 +60,13 @@ public class Example3 {
                 return Optional.empty();
             }
         }).filter(Optional::isPresent).map(Optional::get).collect(ImmutableList.toImmutableList());
-        System.out.println(result);
+        log(result);
 
         //list.stream().map(URL::new).collect(ImmutableList.toImmutableList()); // Won't compile
 
         // Exception with Try (if you can't avoid exception)
         val result2 = list.stream().map(v -> Try.of(() -> Integer.valueOf(v))).filter(v -> v.isSuccess()).collect(ImmutableList.toImmutableList());
-        System.out.println(result2);
+        log(result2);
     }
 
     @Test
@@ -73,9 +76,9 @@ public class Example3 {
         val result = list.stream().map(v -> Try.of(() -> Integer.valueOf(v))).collect(ImmutableList.toImmutableList());
         val filtered = result.stream().filter(v -> v.isSuccess()).map(v -> v.get()).collect(ImmutableList.toImmutableList());
         val errors = result.stream().filter(v -> v.isFailure()).map(v -> v.getCause()).map(Throwable::getMessage).collect(ImmutableList.toImmutableList());
-        System.out.println(result);
-        System.out.println(filtered);
-        System.out.println(errors);
+        log(result);
+        log(filtered);
+        log(errors);
     }
 
     @Test
@@ -85,9 +88,9 @@ public class Example3 {
         val result = list.stream().map(v -> v.chars().allMatch(Character::isDigit) ? Either.right(Integer.valueOf(v)): Either.left(v)).collect(ImmutableList.toImmutableList());
         val filtered = result.stream().filter(v -> !v.isEmpty()).map(Either::get).collect(ImmutableList.toImmutableList());
         val errors = result.stream().filter(v -> v.isEmpty()).map(v -> v.getLeft()).collect(ImmutableList.toImmutableList());
-        System.out.println(result);
-        System.out.println(filtered);
-        System.out.println(errors);
+        log(result);
+        log(filtered);
+        log(errors);
     }
 
     @Test
@@ -105,7 +108,7 @@ public class Example3 {
 
     @Test
     public void testStreamPuzzle2() {
-        System.out.println(Stream.of(-3, -2, -1, 0, 1, 2, 3).max(Math::max).get());
+        log(Stream.of(-3, -2, -1, 0, 1, 2, 3).max(Math::max).get());
     }
 
     @Test
@@ -117,7 +120,7 @@ public class Example3 {
 
     @Test
     public void testCollections() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("1");
         list.add("2");
         list.add("3");
@@ -151,8 +154,8 @@ public class Example3 {
 
         Object[] array1 = list.stream().map(Integer::valueOf).toArray(); // Why array of Objects?
         String[] array2 = list.toArray(new String[0]); // Why list has another syntax?
-        System.out.println(Arrays.toString(array1));
-        System.out.println(Arrays.toString(array2));
+        log(Arrays.toString(array1));
+        log(Arrays.toString(array2));
 
         ImmutableMap<String, Integer> map = ImmutableMap.of(
             "1", 1,
@@ -160,12 +163,11 @@ public class Example3 {
             "3", 3
         );
 
-        // Such an easy operation becomes rocket science!
+        // Such an easy map operation over Map becomes rocket science!
         Map<Integer, String> transformedMap = map.entrySet().stream().map(entry ->
             new AbstractMap.SimpleEntry<>(Integer.valueOf(entry.getKey()), String.valueOf(entry.getValue()))
         ).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 
-        System.out.println(transformedMap);
+        log(transformedMap);
     }
-
 }

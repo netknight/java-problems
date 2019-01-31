@@ -6,7 +6,7 @@ import org.junit.runners.JUnit4;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static junit.framework.TestCase.assertEquals;
+import static utils.Utils.log;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 @RunWith(JUnit4.class)
@@ -31,11 +31,9 @@ public class Example2 {
 
     @Test
     public void testLambdas() {
-        assertEquals("10", lambdaOneParam(10, v -> v.toString()));
-        assertEquals("10, 20", lambdaTwoParams(10, 20, (v1, v2) -> v1 + ", " + v2));
-        assertEquals("10, 20, 30", lambdaThreeParams(10, 20, 30, (v1, v2, v3) ->
-            v1 + ", " + v2 + ", " + v3)
-        );
+        log(lambdaOneParam(10, v -> v.toString()));
+        log(lambdaTwoParams(10, 20, (v1, v2) -> v1 + ", " + v2));
+        log(lambdaThreeParams(10, 20, 30, (v1, v2, v3) -> v1 + ", " + v2 + ", " + v3));
     }
 
     @Test
@@ -48,14 +46,14 @@ public class Example2 {
         });
         */
 
-        System.out.println(lambdaOneParam(10, v -> this.toString()));
+        log(lambdaOneParam(10, v -> this.toString()));
     }
 
     @Test
     public void operatorsTest() {
         Function<Integer, Integer> count = (x -> x * x + 2 * x + 100);
         int result = count.apply(100);
-        System.out.println(result);
+        log(result);
         //result = (x ->  x * x + 2 * x + 100).apply(100);
     }
 

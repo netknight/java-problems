@@ -9,14 +9,11 @@ import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static utils.Utils.log;
 
-@SuppressWarnings({"ArrayEquals", "SameParameterValue", "SimplifiableJUnitAssertion"})
+@SuppressWarnings({"ArrayEquals", "SameParameterValue", "SimplifiableJUnitAssertion", "ConstantConditions"})
 @RunWith(JUnit4.class)
 public class Example1 {
-
-    private void log(String str) {
-        System.out.println(str);
-    }
 
     private double pow(Number n, int times) {
         // 1. Where Number operations: sum, diff, multiply, divide???
@@ -33,15 +30,17 @@ public class Example1 {
         int c = 3;
         Integer d = 4;
 
-        int r1 = (int)(a + b + c + d); // Why cast is needed here?
+        int sum1 = (int)(a + b + c + d); // Why cast is needed here?
 
-        Long r2 = b + d; // And why not needed here?
+        Long sum2 = b + d; // And why not needed here?
 
-        assertEquals(10, r1);
-        assertTrue(6L == r2);
-        //assertEquals(6L, r2); // Won't compile
-        //assertEquals(1, a.longValue()); // Won't compile (forget about OOP)
-        assertEquals(9, pow(c, 2)); // WTF??!
+        boolean eq1 = sum1 == 10;
+        boolean eq2 = sum2 == 6L;
+
+
+        //assertEquals(6L, r2);
+        //assertEquals(1, a.longValue());
+        assertEquals(9, pow(c, 2));
 
         // How many boxing & unboxing are used during this test?
     }
@@ -49,10 +48,8 @@ public class Example1 {
 
     @Test
     public void testBigDecimals() {
-        BigDecimal a = new BigDecimal(1);
-        BigDecimal b = new BigDecimal(2);
-
-        assertEquals(b, a.multiply(new BigDecimal("2.0")));
+        // "Very" convenient without operators
+        assertEquals(new BigDecimal(2), new BigDecimal(1).multiply(new BigDecimal("2.0")));
     }
 
     @Test
@@ -63,13 +60,15 @@ public class Example1 {
         String[] array2 = {"A", "B"};
         assertTrue(array1.equals(array2));
 
-        //Optional<String>[] array = {Optional.of("A")}; // Doesn't work
+        // assertTrue({"A", "B"} == {"A", "B"});
+
+        //Optional<String>[] array = {Optional.of("A")};
 
         // The only way to create array of parametrized elements
         Optional<String>[] array = new Optional[10];
         array[0] = Optional.of("zero");
-        System.out.println(array.toString());
-        System.out.println(Arrays.toString(array));
+        log(array.toString());
+        log(Arrays.toString(array));
     }
 
     static class MyClass {
@@ -93,6 +92,7 @@ public class Example1 {
     public void testFunctionOverload() {
         Optional<String>[] array = new Optional[10];
         array[0] = Optional.of("Test4");
+        Function<String, String> f = (s) -> s;
 
         log(MyClass.toString("Test1"));
         log(MyClass.toString(Integer.MAX_VALUE));
@@ -100,11 +100,9 @@ public class Example1 {
         log(MyClass.toString(Optional.empty()));
         log(MyClass.toString(Optional.of("Test3"), Optional.empty()));
         log(MyClass.toString(array));
-        //log(MyClass.toString(null)); // won't compile
-
-        Function<String, String> f = (s) -> s;
-        log(MyClass.toString(f));
-        //log(MyClass.toString((s) -> s)); // won't compile
+        //log(MyClass.toString(f));
+        //log(MyClass.toString(null));
+        //log(MyClass.toString((s) -> s));
     }
 
 }

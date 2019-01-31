@@ -5,6 +5,7 @@ import org.junit.runners.JUnit4;
 
 import static io.vavr.API.*;
 import static io.vavr.Predicates.instanceOf;
+import static utils.Utils.log;
 
 @SuppressWarnings("WeakerAccess")
 @RunWith(JUnit4.class)
@@ -90,9 +91,9 @@ public class Example4 {
 
     @Test
     public void test() {
-        Request request = new RequestA("My request");
+        Request request = new RequestH("My request");
         Response response = process(request);
-        System.out.println(response.getResponse());
+        log(response.getResponse());
     }
 
 }

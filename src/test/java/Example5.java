@@ -11,13 +11,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Stream;
 
+import static utils.Utils.log;
+
 @SuppressWarnings({"WeakerAccess", "UnstableApiUsage", "unused"})
 @RunWith(JUnit4.class)
 public class Example5 {
-
-    static void logRecord(String message) {
-        System.out.println(message);
-    }
 
     static ImmutableMap<String, String> getSearchEnginesToFind() {
         return ImmutableMap.of(
@@ -68,21 +66,21 @@ public class Example5 {
 
         ImmutableList<ImmutableList<String>> combinedSearchResult = sequence(getSearchEnginesToFind().entrySet().stream().map(entry ->
             doFindInSearchEngine(entry.getValue()).thenApply(result-> {
-                logRecord(entry.getKey() + " search finished.");
+                log(entry.getKey() + " search finished.");
                 return result;
             })
         )).toCompletableFuture().join();
 
-        logRecord("Completed with total results: " + combinedSearchResult.stream().mapToInt(AbstractCollection::size).sum());
+        log("Completed with total results: " + combinedSearchResult.stream().mapToInt(AbstractCollection::size).sum());
     }
 
     @Test
     public void concurrencyTest2() {
 
         ImmutableList<Void> combinedSearchResult = sequence(getSearchEnginesToFind().entrySet().stream().map(entry ->
-            doFindInSearchEngine(entry.getValue()).thenAccept(result-> logRecord(entry.getKey() + " search finished."))
+            doFindInSearchEngine(entry.getValue()).thenAccept(result-> log(entry.getKey() + " search finished."))
         )).toCompletableFuture().join();
 
-        logRecord("Completed with total searches: " + combinedSearchResult.size());
+        log("Completed with total searches: " + combinedSearchResult.size());
     }
 }
