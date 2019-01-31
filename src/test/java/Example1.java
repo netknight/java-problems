@@ -21,7 +21,6 @@ public class Example1 {
     private double pow(Number n, int times) {
         // 1. Where Number operations: sum, diff, multiply, divide???
         // 2. Long & Integer has some operation but duplicate Math functions? For what?
-        // 3. MAX_VAL & MIN_VAL - are primitives
 
         return Math.pow((double)n, times);
     }
@@ -39,8 +38,8 @@ public class Example1 {
         Long r2 = b + d; // And why not needed here?
 
         assertEquals(10, r1);
-        //assertEquals(6L, r2); // Won't compile
         assertTrue(6L == r2);
+        //assertEquals(6L, r2); // Won't compile
         //assertEquals(1, a.longValue()); // Won't compile (forget about OOP)
         assertEquals(9, pow(c, 2)); // WTF??!
 
@@ -97,7 +96,6 @@ public class Example1 {
 
         log(MyClass.toString("Test1"));
         log(MyClass.toString(Integer.MAX_VALUE));
-
         log(MyClass.toString(Optional.of("Test2")));
         log(MyClass.toString(Optional.empty()));
         log(MyClass.toString(Optional.of("Test3"), Optional.empty()));
